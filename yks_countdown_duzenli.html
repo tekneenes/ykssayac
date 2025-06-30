@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YKS Geri Sayım</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(-45deg, #3a1c71, #d76d77, #ffaf7b, #4facfe, #00f2fe);
+      background-size: 400% 400%;
+      animation: gradientBG 30s ease infinite;
+      transition: background 2s;
+      overflow: hidden;
+      text-align: center;
+      padding: 20px;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    h1 {
+      font-size: 3em;
+      color: #ffffff;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+    }
+
+    #countdown {
+      display: flex;
+      gap: 15px;
+      font-size: 2.5em;
+      font-weight: bold;
+      color: #ffffff;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.6);
+      margin-bottom: 30px;
+      transition: color 2s;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .time-box {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 10px 20px;
+      border-radius: 10px;
+      text-align: center;
+      min-width: 100px;
+    }
+
+    .time-value {
+      font-size: 1.5em;
+      display: block;
+    }
+
+    .time-label {
+      font-size: 0.6em;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    #quote {
+      font-size: 1.5em;
+      color: #ffffff;
+      background: rgba(0,0,0,0.3);
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      max-width: 90%;
+      transition: color 2s;
+    }
+  </style>
+</head>
+<body>
+  <h1>YKS Sayacı</h1>
+  <div id="countdown">
+    <div class="time-box"><span id="days" class="time-value">0</span><span class="time-label">Gün</span></div>
+    <div class="time-box"><span id="hours" class="time-value">0</span><span class="time-label">Saat</span></div>
+    <div class="time-box"><span id="minutes" class="time-value">0</span><span class="time-label">Dakika</span></div>
+    <div class="time-box"><span id="seconds" class="time-value">0</span><span class="time-label">Saniye</span></div>
+  </div>
+  <div id="quote"></div>
+
+  <script>
+const now = new Date();
+const targetDate = new Date(now.getTime() + (355 * 24 * 60 * 60 * 1000));
+
+
+    const daysEl = document.getElementById("days");
+    const hoursEl = document.getElementById("hours");
+    const minutesEl = document.getElementById("minutes");
+    const secondsEl = document.getElementById("seconds");
+    const quoteEl = document.getElementById("quote");
+
+    const quotes = [
+      "Çalıştığın gün, hayalindeki güne bir gün daha yaklaşıyorsun.",
+      "Yorulabilirsin ama asla vazgeçme!",
+      "Başarı, cesaretin ürünüdür.",
+      "Bugün yaptığın fedakarlık, yarının zaferi olur.",
+      "Hayal et, inan, çalış ve başar.",
+      "Hedefine giden yolda her adım değerlidir.",
+      "Çaban, gelecekteki başarının mimarıdır.",
+      "Zorlandığın anlar, geliştiğin anlardır.",
+      "Kendine güven, en büyük gücündür.",
+      "Hayallerine bir adım daha yakınsın, pes etme.",
+      "Her gün yeni bir başlangıç, yeni bir fırsattır.",
+      "Başarı, sıkı çalışmanın ürünüdür.",
+      "Unutma, sen yapabilirsin!",
+      "Geleceğin, bugünkü kararlılığınla şekilleniyor.",
+      "Düşüncelerini hedefine odakla.",
+      "Her soru, seni zirveye taşıyan bir basamaktır.",
+      "Vazgeçmediğin sürece yenilmezsin.",
+      "Başarı, sabır ve azmin kardeşidir.",
+      "Kendine inan, gerisi gelecek.",
+      "Büyük hayaller, büyük çabalar gerektirir.",
+      "Bu yolculukta her anın kıymeti var.",
+      "Terlemekten korkma, çünkü her damlası değerlidir.",
+      "Bugün çalıştıkların, yarınki gülüşündür.",
+      "Odaklan, çünkü hedefine ulaşacaksın.",
+      "En iyi halini ortaya koyma zamanı.",
+      "Gelecek, çalışkanların eseri olacak.",
+      "Her hata, öğrenmek için bir fırsattır.",
+      "Yılma, çünkü zafer yakın.",
+      "Yapabileceklerinin sınırı yok, sadece sen belirle.",
+      "Büyük resme odaklan, küçük engelleri aş.",
+      "Seni durdurabilecek tek şey, kendin.",
+      "Potansiyelini keşfet ve kullan.",
+      "Her molan, yeni bir başlangıç için enerji.",
+      "Pes etme, hedefine ulaşmak üzeresin.",
+      "Başarı, en iyi intikamdır.",
+      "Hayatını değiştirecek güce sahipsin.",
+      "Kararlılıkla ilerle, önünde kimse duramaz.",
+      "Kendini aşmak için harika bir fırsat.",
+      "Gelecekteki sen, sana teşekkür edecek.",
+      "Asla vazgeçme, mucizeler zaman alır.",
+      "Dün bitti, bugün yeni bir şans.",
+      "Her gün bir adım daha ileriye.",
+      "Bu süreçte yalnız değilsin.",
+      "Başarıya giden yol, disiplinden geçer.",
+      "Zorluklar seni daha güçlü yapar.",
+      "Hedefine kilitlen.",
+      "Zihnine hükmet, bedenine değil.",
+      "Yılmadan çalış, çünkü karşılığını alacaksın.",
+      "Kendine yatırım yapıyorsun.",
+      "Bu sadece bir sınav, senin değerin çok daha büyük.",
+      "En iyi versiyonun olmak için çabala.",
+      "Hayallerin senden daha büyük değil.",
+      "Her nefeste başarıya bir adım.",
+      "Vazgeçersen kaybedersin, devam edersen kazanırsın.",
+      "Şimdi değilse ne zaman? ",
+      "Sen birincisin, bunu asla unutma.",
+      "Zirveye giden yol, seninle başlıyor.",
+      "Korkularını aş, çünkü zafer orada.",
+      "Daha iyi bir gelecek için çalışıyorsun.",
+      "Her damla ter, başarıya giden yolda bir ışıktır.",
+      "Hedefini gözünde büyüt, çabanı değil.",
+      "Odaklanmış zihin, yenilmezdir.",
+      "Kendini motive etmenin gücü sende.",
+      "Her yeni bilgi, seni zenginleştirir.",
+      "Pes etmek diye bir kelime lügatinde olmasın.",
+      "Gücünü keşfet, hayallerine ulaş.",
+      "Yarınlar senin için parlayacak.",
+      "Her tekrar, hafızana bir kazı.",
+      "En iyi öğretmen tecrübedir.",
+      "Yol uzun olabilir, ama varış noktası muhteşem.",
+      "Sıkı çalış, sessizce kazan.",
+      "Azmin zaferi yakın.",
+      "İnanmak, başarmanın yarısıdır.",
+      "Şüphe etme, yapabilirsin.",
+      "Başarı senin genlerinde var.",
+      "Her nefes, yeni bir umut.",
+      "Kararlılığını asla yitirme.",
+      "Engeller sadece birer basamaktır.",
+      "Zirveye ulaşmak için doğdun.",
+      "Motivasyonunu yüksek tut, çünkü bu bir maraton.",
+      "Düşüncelerini pozitif tut.",
+      "Kendine acıma, kendine güven.",
+      "Her uyandığında yeni bir şansın var.",
+      "Geleceğin ışığını sen yakacaksın.",
+      "Başarı, çabalarına değecek.",
+      "Gözünü hedeften ayırma.",
+      "Sınav sadece bir basamak.",
+      "Her geçen gün daha iyiye.",
+      "Disiplin, başarının anahtarıdır.",
+      "Vazgeçmek yok, mücadeleye devam.",
+      "Gücünü içinden al.",
+      "Kendine inan, başkalarının ne dediği önemli değil.",
+      "Hayallerin sana fısıldıyor.",
+      "Yüksek hedefler koy, daha çok çalış.",
+      "En iyisi olmak için buradasın.",
+      "Her zorluğun arkasında bir zafer var.",
+      "Sen eşsizsin, başarın da öyle olacak.",
+      "Odaklan, çünkü zaman akıyor.",
+      "Başarı, seninle birlikte yola çıktı.",
+      "Her ter damlası bir altın değerinde.",
+      "Hayatın değişiyor, sen bunu başarıyorsun.",
+      "Şimdi topla kendini, yola devam.",
+      "Unutma, sen güçlüsün.",
+      "Yarınlara umutla bak.",
+      "En iyi sonuçlar senin olacak.",
+      "Kendini keşfet, sınırlarını zorla.",
+      "Başarısızlık yoktur, ders vardır.",
+      "Her gün kendini yenile.",
+      "Hayallerin gerçeğe dönüşecek.",
+      "Sakın pes etme, zafer seninle.",
+      "Geleceğin için mücadele et.",
+      "Her ders, yeni bir zafer.",
+      "Motivasyonunu canlı tut.",
+      "Kendine güvenmek, başarının ilk adımıdır.",
+      "Her adımın seni hedefine yaklaştırıyor.",
+      "Yılmadan çalış, istediğin üniversiteye ulaş.",
+      "Sen bu işi başaracaksın.",
+      "Korkuların seni durdurmasın.",
+      "Gelecekteki başarıların için yatırım yapıyorsun.",
+      "Her gün yeni bir fırsat, yeni bir şans.",
+      "Odaklan, başaracaksın.",
+      "Büyük düşün, büyük başar.",
+      "En iyi sen olmak için çabala.",
+      "Hayallerin gerçek olmak için seni bekliyor.",
+      "Asla vazgeçme, son ana kadar savaş.",
+      "Dün geride kaldı, bugün yeni bir sayfa.",
+      "Dün önemli değil, bugün ne yaptığın önemli.",
+      "Her sabah yeni bir başlangıç.",
+      "Disiplinle çalış, karşılığını al.",
+      "Zorluklar seni yıldırmasın, güçlendirsin.",
+      "Hedefine emin adımlarla ilerle.",
+      "Zihnine pozitif komutlar ver.",
+      "Yılma, çünkü emeklerin boşa gitmeyecek.",
+      "Kendine inan, en büyük destekçin sensin.",
+      "Bu süreç seni daha da olgunlaştıracak.",
+      "Hayallerini gerçekleştirmek senin elinde.",
+      "Pes etmek, asla bir seçenek değildir.",
+      "Gücünü keşfet, potansiyelini kullan.",
+      "Yarınlar senin için umut dolu.",
+      "Her tekrar, bilgiyi pekiştirir.",
+      "En iyi öğretmen, tecrübelerindir.",
+      "Yolculuk uzun olsa da, varış noktası buna değer.",
+      "Sessizce çalış, başarıların konuşsun.",
+      "Azmin ve kararlılığın, zaferin anahtarıdır.",
+      "İnanmakla başlar her şey.",
+      "Şüphe etme, yapabilirsin. ",
+      "Başarı senin içinde.",
+      "Her yeni gün, yeni bir umut.",
+      "Kararlılığını sürdür.",
+      "Engeller sadece testlerdir.",
+      "Zirve senin için var.",
+      "Motivasyonunu hep yüksek tut.",
+      "Pozitif düşün, pozitif sonuçlar al.",
+      "Kendine acıma, kendine inan.",
+      "Her sabah yeni bir şans.",
+      "Geleceğin parlaklığı senin elinde.",
+      "Başarı, çabana değecek.",
+      "Gözünü hedeften ayırma.",
+      "Sınav sadece bir araç.",
+      "Her geçen an daha iyiye.",
+      "Disiplin, başarının garantisidir.",
+      "Mücadele etmeye devam et.",
+      "İçindeki gücü kullan.",
+      "Kendine güven, çünkü sen özel birisin.",
+      "Hayallerin sana yol göstersin.",
+      "Yüksek hedefler, yüksek başarılar getirir.",
+      "En iyisi olmak için doğdun.",
+      "Her zorluğun sonunda bir zafer var.",
+      "Sen benzersizsin, başarın da öyle olacak.",
+      "Odaklan, çünkü zaman değerli.",
+      "Başarı seninle yola çıktı.",
+      "Her ter damlası bir hazinedir.",
+      "Hayatın değişiyor, sen bunu başarıyorsun.",
+      "Şimdi toparlan, yola devam.",
+      "Unutma, sen çok güçlüsün.",
+      "Yarınlara umutla bak.",
+      "En iyi sonuçlar seni bekliyor.",
+      "Kendini keşfet, sınırlarını zorla.",
+      "Başarısızlık yoktur, sadece öğrenme fırsatları vardır.",
+      "Her gün kendini yenile, daha iyi ol.",
+      "Hayallerin gerçeğe dönüşecek.",
+      "Asla pes etme, zafer senin.",
+      "Geleceğin için mücadele etmeye devam et.",
+      "Her ders, yeni bir kapı açar.",
+      "Motivasyonunu daima yüksek tut.",
+      "Kendine güven, çünkü sen buna değersin.",
+      "Her adımın, hedefine bir tuğla ekler.",
+      "Yılmadan çalış, hayallerine ulaş.",
+      "Sen bu sınavı başarabilirsin.",
+      "Gelecekteki kariyerin için çalışıyorsun.",
+      "Her gün yeni bir fırsat, kullan onu.",
+      "Odaklan, başarının kilidi sende.",
+      "Büyük düşün, büyük başar.",
+      "En iyi halinle ortaya çık.",
+      "Hayallerin gerçek olmak için seni bekliyor.",
+      "Asla vazgeçme, son ana kadar savaş.",
+      "Dün geride kaldı, bugün yeni bir sayfa.",
+      "Her sabah yeni bir şans.",
+      "Disiplinle çalış, sonuçlarını göreceksin.",
+      "Zorluklar seni durdurmasın, güçlendirsin.",
+      "Hedefine emin adımlarla ilerle.",
+      "Zihnine pozitif komutlar ver.",
+      "Yılma, çünkü emeklerin boşa gitmeyecek.",
+      "Kendine inan, en büyük destekçin sensin.",
+      "Bu süreç seni daha da olgunlaştıracak.",
+      ];const colors = ["#ffffff", "#ffffcc", "#ffccff", "#ccffff", "#ffe6cc"];
+
+    function updateCountdown() {
+      const now = new Date();
+      const diff = targetDate - now;
+
+      if (diff <= 0) {
+        document.getElementById("countdown").textContent = "Sınav zamanı geldi!";
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+
+      daysEl.textContent = days;
+      hoursEl.textContent = hours;
+      minutesEl.textContent = minutes;
+      secondsEl.textContent = seconds;
+    }
+
+    function changeColors() {
+      const randomIndex = Math.floor(Math.random() * colors.length);
+      document.querySelectorAll(".time-box").forEach(box => {
+        box.style.color = colors[randomIndex];
+      });
+      quoteEl.style.color = colors[randomIndex];
+    }
+
+    function changeQuote() {
+      const randomIndex = Math.floor(Math.random() * quotes.length);
+      quoteEl.textContent = quotes[randomIndex];
+    }
+
+    updateCountdown();
+    changeColors();
+    changeQuote();
+
+    setInterval(updateCountdown, 1000);
+    setInterval(() => {
+      changeColors();
+      changeQuote();
+    }, 10000);
+  </script>
+</body>
+</html>
