@@ -1,360 +1,707 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>YKS Geri Sayım</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YKS Geri Sayım - Ultra Gamer Edition</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    html, body {
-      height: 100%;
-      width: 100%;
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      background: linear-gradient(-45deg, #3a1c71, #d76d77, #ffaf7b, #4facfe, #00f2fe);
-      background-size: 400% 400%;
-      animation: gradientBG 30s ease infinite;
-      transition: background 2s;
-      overflow: hidden;
-      text-align: center;
-      padding: 20px;
-    }
+        html, body {
+            height: 100%;
+            width: 100%;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+        }
 
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
+        body {
+            background: linear-gradient(-45deg, #1a0a2e, #2c0e4f, #150824, #3d146b);
+            background-size: 400% 400%;
+            animation: ultraGradient 15s ease infinite, backgroundPulse 10s ease-in-out infinite;
+            position: relative;
+            min-height: 100vh;
+            color: #e0e0e0;
+        }
 
-    h1 {
-      font-size: 3em;
-      color: #ffffff;
-      margin-bottom: 20px;
-      text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
-    }
+        @keyframes ultraGradient {
+            0% { background-position: 0% 50%; }
+            25% { background-position: 100% 50%; }
+            50% { background-position: 100% 100%; }
+            75% { background-position: 0% 100%; }
+            100% { background-position: 0% 50%; }
+        }
 
-    #countdown {
-      display: flex;
-      gap: 15px;
-      font-size: 2.5em;
-      font-weight: bold;
-      color: #ffffff;
-      text-shadow: 2px 2px 5px rgba(0,0,0,0.6);
-      margin-bottom: 30px;
-      transition: color 2s;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
+        @keyframes backgroundPulse {
+            0% { filter: brightness(1); }
+            50% { filter: brightness(1.1); }
+            100% { filter: brightness(1); }
+        }
 
-    .time-box {
-      background: rgba(0, 0, 0, 0.3);
-      padding: 10px 20px;
-      border-radius: 10px;
-      text-align: center;
-      min-width: 100px;
-    }
+        .floating-orb {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(180, 50, 255, 0.4), rgba(50, 180, 255, 0.1));
+            backdrop-filter: blur(15px);
+            animation: float3D 8s ease-in-out infinite;
+            box-shadow: 
+                0 15px 30px rgba(0, 0, 0, 0.2),
+                inset 0 0 15px rgba(200, 200, 255, 0.1);
+            border: 1px solid rgba(100, 200, 255, 0.1);
+        }
 
-    .time-value {
-      font-size: 1.5em;
-      display: block;
-    }
+        .orb-1 { width: 100px; height: 100px; top: 10%; left: 15%; animation-delay: 0s; }
+        .orb-2 { width: 150px; height: 150px; top: 60%; right: 10%; animation-delay: 2s; }
+        .orb-3 { width: 80px; height: 80px; bottom: 20%; left: 8%; animation-delay: 4s; }
+        .orb-4 { width: 120px; height: 120px; top: 30%; right: 25%; animation-delay: 1s; }
+        .orb-5 { width: 60px; height: 60px; top: 75%; left: 60%; animation-delay: 3s; }
 
-    .time-label {
-      font-size: 0.6em;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
+        @keyframes float3D {
+            0%, 100% { 
+                transform: translateY(0px) rotateX(0deg) rotateY(0deg) scale(1);
+                opacity: 0.7;
+            }
+            33% { 
+                transform: translateY(-25px) rotateX(10deg) rotateY(10deg) scale(1.05);
+                opacity: 0.9;
+            }
+            66% { 
+                transform: translateY(15px) rotateX(-8deg) rotateY(-8deg) scale(0.95);
+                opacity: 0.6;
+            }
+        }
 
-    #quote {
-      font-size: 1.5em;
-      color: #ffffff;
-      background: rgba(0,0,0,0.3);
-      padding: 20px;
-      border-radius: 10px;
-      text-align: center;
-      max-width: 90%;
-      transition: color 2s;
-    }
-  </style>
+        .magic-particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: linear-gradient(45deg, #aaffaa, #55eeff);
+            border-radius: 50%;
+            animation: magicFloat 6s linear infinite;
+            box-shadow: 
+                0 0 5px #aaffaa,
+                0 0 10px #55eeff;
+        }
+
+        @keyframes magicFloat {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Dikeyde ortala */
+            align-items: center;     /* Yatayda ortala */
+            min-height: 100vh;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .ultra-glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(25px);
+            border: 2px solid;
+            border-image: linear-gradient(45deg, 
+                #00F0FF, #FF00FF, #00FF00, #FFFF00, #FF0000) 1;
+            border-image-slice: 1;
+            border-image-width: 5px; /* Kalınlaştırıldı */
+            border-image-outset: 0;
+            animation: cardPulse 4s ease-in-out infinite, borderFlow 3s linear infinite; /* Hızlandırıldı */
+            border-radius: 20px;
+            padding: 50px;
+            max-width: 1000px;
+            width: 100%;
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.03),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            /* Flex konteyner olarak tanımla ki içindeki #countdown'u ortalayabilelim */
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* İçindeki öğeleri yatayda ortala */
+            justify-content: center; /* İçindeki öğeleri dikeyde ortala (eğer yüksekliği yeterliyse) */
+        }
+
+        @keyframes borderFlow {
+            0% { border-image-source: linear-gradient(45deg, #00F0FF, #FF00FF, #00FF00, #FFFF00, #FF0000); }
+            25% { border-image-source: linear-gradient(90deg, #FF00FF, #00FF00, #FFFF00, #FF0000, #00F0FF); }
+            50% { border-image-source: linear-gradient(135deg, #00FF00, #FFFF00, #FF0000, #00F0FF, #FF00FF); }
+            75% { border-image-source: linear-gradient(180deg, #FFFF00, #FF0000, #00F0FF, #FF00FF, #00FF00); }
+            100% { border-image-source: linear-gradient(45deg, #00F0FF, #FF00FF, #00FF00, #FFFF00, #FF0000); }
+        }
+
+        .ultra-glass-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                from 0deg,
+                transparent,
+                rgba(0, 255, 255, 0.1),
+                transparent,
+                rgba(255, 0, 255, 0.1),
+                transparent
+            );
+            animation: shimmer 8s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes shimmer {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes cardPulse {
+            0%, 100% { 
+                transform: scale(1);
+                box-shadow: 
+                    0 20px 40px rgba(0, 0, 0, 0.3),
+                    0 0 60px rgba(0, 255, 255, 0.2);
+            }
+            50% { 
+                transform: scale(1.01);
+                box-shadow: 
+                    0 30px 60px rgba(0, 0, 0, 0.4),
+                    0 0 90px rgba(255, 0, 255, 0.3);
+            }
+        }
+
+        .ultra-glass-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 
+                0 30px 60px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.05),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        h1 {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 900;
+            color: transparent;
+            margin-bottom: 15px;
+            text-shadow: none;
+            letter-spacing: -0.02em;
+            background: linear-gradient(
+                90deg,
+                #00F0FF 0%,
+                #FF00FF 25%,
+                #00FF00 50%,
+                #FFFF00 75%,
+                #FF0000 100%
+            );
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: rgbTextFlow 6s linear infinite;
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes rgbTextFlow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        h1::after {
+            display: none; 
+        }
+
+        .subtitle {
+            font-size: 1.4rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 50px;
+            font-weight: 500;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+            animation: subtitleGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes subtitleGlow {
+            0% { text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4); }
+            100% { text-shadow: 0 2px 15px rgba(100, 200, 255, 0.7); }
+        }
+
+        #countdown {
+            /* Yan yana düzen için Flexbox */
+            display: flex; /* Grid yerine flex */
+            flex-wrap: wrap; /* Gerekirse alt satıra geçsin */
+            justify-content: center; /* Öğeleri yatayda ortala */
+            align-items: center; /* Öğeleri dikeyde ortala */
+            gap: 20px; /* Öğeler arası boşluk */
+            margin: 50px auto; /* Üstten/alttan boşluk, yatayda ortala */
+            max-width: 800px;
+            width: 100%;
+            perspective: 1000px;
+            
+            /* Sayaç kutusunun etrafındaki kayar kenarlık */
+            border: 2px solid;
+            border-image: linear-gradient(45deg, 
+                #00F0FF, #FF00FF, #00FF00, #FFFF00, #FF0000) 1;
+            border-image-slice: 1;
+            border-image-width: 4px; /* Kalınlaştırıldı */
+            border-image-outset: 0;
+            animation: borderFlow 3s linear infinite; /* Hızlandırıldı */
+            border-radius: 18px; /* Kartın radiusuna yakın */
+            padding: 15px; /* İçerideki kutularla kenarlık arasında boşluk */
+            box-shadow: 0 0 30px rgba(0,255,255,0.2); /* Hafif gölge */
+        }
+
+        .time-box {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 25px 20px;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            flex: 1; /* Eşit dağılmasını sağla */
+            min-width: 150px; /* Çok küçülmemesi için minimum genişlik */
+            max-width: 200px; /* Opsiyonel: maksimum genişlik */
+        }
+
+        .time-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg, 
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            transition: left 0.5s ease-out;
+        }
+
+        .time-box:hover::before {
+            left: 100%;
+        }
+
+        .time-box:hover {
+            transform: translateY(-8px) scale(1.05);
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(0, 255, 255, 0.4);
+            box-shadow: 
+                0 15px 30px rgba(0, 0, 0, 0.3),
+                0 0 30px rgba(0, 255, 255, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .time-box:nth-child(1) { animation-delay: 0.05s; }
+        .time-box:nth-child(2) { animation-delay: 0.1s; }
+        .time-box:nth-child(3) { animation-delay: 0.15s; }
+        .time-box:nth-child(4) { animation-delay: 0.2s; }
+
+        .time-value {
+            font-family: 'Orbitron', monospace;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: transparent;
+            display: block;
+            line-height: 1;
+            background: linear-gradient(135deg, #FFF 0%, #AAA 50%, #FFF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 
+                0 0 15px rgba(255, 255, 255, 0.4),
+                0 0 25px rgba(0, 255, 255, 0.3);
+            animation: numberPulse 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes numberPulse {
+            0%, 100% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.02); filter: brightness(1.1); }
+        }
+
+        .time-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: rgba(200, 220, 255, 0.95);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .quote-container {
+            margin-top: 50px;
+            max-width: 800px;
+            width: 100%;
+            position: relative;
+            z-index: 2;
+        }
+
+        #quote {
+            font-size: 1.4rem;
+            line-height: 1.6;
+            color: #d0e0ff;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            padding: 35px;
+            border-radius: 24px;
+            border: 2px solid rgba(150, 200, 255, 0.1);
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+            font-weight: 500;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            font-style: italic;
+        }
+
+        #quote::before, #quote::after {
+            font-size: 5rem;
+            color: rgba(100, 150, 255, 0.1);
+            position: absolute;
+            z-index: 0;
+        }
+
+        #quote::before {
+            content: "“";
+            top: -10px;
+            left: 10px;
+        }
+
+        #quote::after {
+            content: "”";
+            bottom: -50px;
+            right: 10px;
+        }
+
+        .ultra-announcement {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(135deg, 
+                rgba(10, 0, 20, 0.95) 0%, 
+                rgba(30, 0, 60, 0.98) 50%,
+                rgba(10, 0, 20, 0.95) 100%);
+            backdrop-filter: blur(20px);
+            border-top: 3px solid;
+            border-image: linear-gradient(90deg, 
+                #00F0FF, #FF00FF, #00FF00, #FFFF00, #FF0000) 1;
+            border-image-slice: 1;
+            border-image-width: 5px; /* Kalınlaştırıldı */
+            border-image-outset: 0;
+            animation: borderFlow 3s linear infinite; /* Hızlandırıldı */
+            padding: 12px 0;
+            overflow: hidden;
+            box-shadow: 
+                0 -8px 25px rgba(0, 0, 0, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            z-index: 1000;
+        }
+
+        .ultra-announcement-content {
+            white-space: nowrap;
+            animation: ultraMarquee 30s linear infinite;
+            display: inline-block;
+            padding-left: 100%;
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+        }
+
+        .ultra-announcement-content p {
+            margin: 0;
+            background: linear-gradient(45deg, 
+                #00F0FF 0%, #FF00FF 20%, #00FF00 40%, #FFFF00 60%, #FF0000 80%, #00F0FF 100%);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            /* ultraMarquee zaten üst elemenette var, burada sadece ultraColorFlow */
+            animation: ultraColorFlow 4s ease-in-out infinite; 
+            text-shadow: none;
+            filter: drop-shadow(0 0 8px rgba(0, 255, 255, 0.3));
+        }
+
+        @keyframes ultraMarquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        @keyframes ultraColorFlow {
+            0%, 100% { 
+                background-position: 0% 50%;
+                filter: drop-shadow(0 0 8px rgba(0, 255, 255, 0.3));
+            }
+            50% { 
+                background-position: 100% 50%;
+                filter: drop-shadow(0 0 15px rgba(255, 0, 255, 0.5));
+            }
+        }
+
+        /* --- Responsive Design Adjustments --- */
+        @media (max-width: 992px) {
+            .main-container { padding: 15px; }
+            .ultra-glass-card { padding: 40px; }
+            h1 { font-size: clamp(2.5rem, 5vw, 4.5rem); }
+            .subtitle { font-size: 1.2rem; margin-bottom: 40px; }
+            #countdown { gap: 18px; padding: 12px; }
+            .time-value { font-size: 3rem; }
+            .time-label { font-size: 1rem; }
+            #quote { font-size: 1.3rem; padding: 30px; }
+            .ultra-announcement-content { font-size: 1rem; }
+        }
+
+        @media (max-width: 768px) {
+            .ultra-glass-card { padding: 30px; margin: 15px; }
+            h1 { font-size: 2.8rem; }
+            .time-value { font-size: 2.5rem; }
+            #quote { font-size: 1.2rem; padding: 30px; }
+            .ultra-announcement-content { font-size: 1rem; }
+            #countdown { 
+                /* Tabletlerde 2'şerli sıralanabilir */
+                flex-direction: row; 
+                flex-wrap: wrap; 
+                min-width: unset; 
+                max-width: unset; /* Esneklik için */
+            }
+            .time-box {
+                flex: 1 1 calc(50% - 18px); /* 2'li sıra için */
+                min-width: unset;
+                max-width: unset;
+            }
+            .floating-orb { display: none; }
+        }
+
+        @media (max-width: 480px) {
+            .ultra-glass-card { padding: 25px; }
+            .time-box { padding: 20px 15px; }
+            .time-value { font-size: 2rem; }
+            .time-label { font-size: 0.9rem; }
+            #countdown { 
+                /* Mobilde tek sütun */
+                flex-direction: column; 
+                flex-wrap: nowrap;
+            }
+            .time-box {
+                width: 100%; /* Tam genişlik kapla */
+                min-width: unset;
+                max-width: unset;
+            }
+            #quote { font-size: 1rem; padding: 20px; }
+        }
+
+        /* Loading Animations */
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: translateY(50px) scale(0.8); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .ultra-glass-card { animation: fadeInScale 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .time-box { animation: fadeInScale 1s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        /* Cursor Trail Effect */
+        .cursor-trail {
+            position: fixed;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 255, 255, 0.7), transparent);
+            pointer-events: none;
+            z-index: 9999;
+            animation: trailFade 0.8s ease-out forwards;
+        }
+
+        @keyframes trailFade {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+    </style>
 </head>
 <body>
-  <h1>YKS Sayacı</h1>
-  <div id="countdown">
-    <div class="time-box"><span id="days" class="time-value">0</span><span class="time-label">Gün</span></div>
-    <div class="time-box"><span id="hours" class="time-value">0</span><span class="time-label">Saat</span></div>
-    <div class="time-box"><span id="minutes" class="time-value">0</span><span class="time-label">Dakika</span></div>
-    <div class="time-box"><span id="seconds" class="time-value">0</span><span class="time-label">Saniye</span></div>
-  </div>
-  <div id="quote"></div>
+    <div class="floating-orb orb-1"></div>
+    <div class="floating-orb orb-2"></div>
+    <div class="floating-orb orb-3"></div>
+    <div class="floating-orb orb-4"></div>
+    <div class="floating-orb orb-5"></div>
 
-  <script>
-const now = new Date();
-const targetDate = new Date("June 7, 2026 09:30:00");
+    <div class="main-container">
+        <div class="ultra-glass-card">
+            <h1>YKS GERİ SAYIM</h1>
+            <p class="subtitle">✨ Hedefine giden yolda her saniye değerli ✨</p>
+            
+            <div id="countdown">
+                <div class="time-box">
+                    <span id="days" class="time-value">000</span>
+                    <span class="time-label">Gün</span>
+                </div>
+                <div class="time-box">
+                    <span id="hours" class="time-value">00</span>
+                    <span class="time-label">Saat</span>
+                </div>
+                <div class="time-box">
+                    <span id="minutes" class="time-value">00</span>
+                    <span class="time-label">Dakika</span>
+                </div>
+                <div class="time-box">
+                    <span id="seconds" class="time-value">00</span>
+                    <span class="time-label">Saniye</span>
+                </div>
+            </div>
+            
+            <div class="quote-container">
+                <div id="quote"></div>
+            </div>
+        </div>
+    </div>
 
-    const daysEl = document.getElementById("days");
-    const hoursEl = document.getElementById("hours");
-    const minutesEl = document.getElementById("minutes");
-    const secondsEl = document.getElementById("seconds");
-    const quoteEl = document.getElementById("quote");
+    <div class="ultra-announcement">
+        <div class="ultra-announcement-content">
+            <p>
+                🚨 ÖNEMLI DUYURU: 2025 Yükseköğretim Kurumları Sınavı (YKS) tarihleri henüz ÖSYM tarafından açıklanmadı. Sayacımız, ÖSYM'nin resmî takvimi yayımlamasıyla birlikte en kısa sürede güncellenecektir. En doğru ve güncel bilgi için lütfen ÖSYM'nin resmî internet sitesini takipte kalın. 📚✨ Başarılar dileriz! 🎯
+            </p>
+        </div>
+    </div>
 
-    const quotes = [
-      "Çalıştığın gün, hayalindeki güne bir gün daha yaklaşıyorsun.",
-      "Yorulabilirsin ama asla vazgeçme!",
-      "Başarı, cesaretin ürünüdür.",
-      "Bugün yaptığın fedakarlık, yarının zaferi olur.",
-      "Hayal et, inan, çalış ve başar.",
-      "Hedefine giden yolda her adım değerlidir.",
-      "Çaban, gelecekteki başarının mimarıdır.",
-      "Zorlandığın anlar, geliştiğin anlardır.",
-      "Kendine güven, en büyük gücündür.",
-      "Hayallerine bir adım daha yakınsın, pes etme.",
-      "Her gün yeni bir başlangıç, yeni bir fırsattır.",
-      "Başarı, sıkı çalışmanın ürünüdür.",
-      "Unutma, sen yapabilirsin!",
-      "Geleceğin, bugünkü kararlılığınla şekilleniyor.",
-      "Düşüncelerini hedefine odakla.",
-      "Her soru, seni zirveye taşıyan bir basamaktır.",
-      "Vazgeçmediğin sürece yenilmezsin.",
-      "Başarı, sabır ve azmin kardeşidir.",
-      "Kendine inan, gerisi gelecek.",
-      "Büyük hayaller, büyük çabalar gerektirir.",
-      "Bu yolculukta her anın kıymeti var.",
-      "Terlemekten korkma, çünkü her damlası değerlidir.",
-      "Bugün çalıştıkların, yarınki gülüşündür.",
-      "Odaklan, çünkü hedefine ulaşacaksın.",
-      "En iyi halini ortaya koyma zamanı.",
-      "Gelecek, çalışkanların eseri olacak.",
-      "Her hata, öğrenmek için bir fırsattır.",
-      "Yılma, çünkü zafer yakın.",
-      "Yapabileceklerinin sınırı yok, sadece sen belirle.",
-      "Büyük resme odaklan, küçük engelleri aş.",
-      "Seni durdurabilecek tek şey, kendin.",
-      "Potansiyelini keşfet ve kullan.",
-      "Her molan, yeni bir başlangıç için enerji.",
-      "Pes etme, hedefine ulaşmak üzeresin.",
-      "Başarı, en iyi intikamdır.",
-      "Hayatını değiştirecek güce sahipsin.",
-      "Kararlılıkla ilerle, önünde kimse duramaz.",
-      "Kendini aşmak için harika bir fırsat.",
-      "Gelecekteki sen, sana teşekkür edecek.",
-      "Asla vazgeçme, mucizeler zaman alır.",
-      "Dün bitti, bugün yeni bir şans.",
-      "Her gün bir adım daha ileriye.",
-      "Bu süreçte yalnız değilsin.",
-      "Başarıya giden yol, disiplinden geçer.",
-      "Zorluklar seni daha güçlü yapar.",
-      "Hedefine kilitlen.",
-      "Zihnine hükmet, bedenine değil.",
-      "Yılmadan çalış, çünkü karşılığını alacaksın.",
-      "Kendine yatırım yapıyorsun.",
-      "Bu sadece bir sınav, senin değerin çok daha büyük.",
-      "En iyi versiyonun olmak için çabala.",
-      "Hayallerin senden daha büyük değil.",
-      "Her nefeste başarıya bir adım.",
-      "Vazgeçersen kaybedersin, devam edersen kazanırsın.",
-      "Şimdi değilse ne zaman? ",
-      "Sen birincisin, bunu asla unutma.",
-      "Zirveye giden yol, seninle başlıyor.",
-      "Korkularını aş, çünkü zafer orada.",
-      "Daha iyi bir gelecek için çalışıyorsun.",
-      "Her damla ter, başarıya giden yolda bir ışıktır.",
-      "Hedefini gözünde büyüt, çabanı değil.",
-      "Odaklanmış zihin, yenilmezdir.",
-      "Kendini motive etmenin gücü sende.",
-      "Her yeni bilgi, seni zenginleştirir.",
-      "Pes etmek diye bir kelime lügatinde olmasın.",
-      "Gücünü keşfet, hayallerine ulaş.",
-      "Yarınlar senin için parlayacak.",
-      "Her tekrar, hafızana bir kazı.",
-      "En iyi öğretmen tecrübedir.",
-      "Yol uzun olabilir, ama varış noktası muhteşem.",
-      "Sıkı çalış, sessizce kazan.",
-      "Azmin zaferi yakın.",
-      "İnanmak, başarmanın yarısıdır.",
-      "Şüphe etme, yapabilirsin.",
-      "Başarı senin genlerinde var.",
-      "Her nefes, yeni bir umut.",
-      "Kararlılığını asla yitirme.",
-      "Engeller sadece birer basamaktır.",
-      "Zirveye ulaşmak için doğdun.",
-      "Motivasyonunu yüksek tut, çünkü bu bir maraton.",
-      "Düşüncelerini pozitif tut.",
-      "Kendine acıma, kendine güven.",
-      "Her uyandığında yeni bir şansın var.",
-      "Geleceğin ışığını sen yakacaksın.",
-      "Başarı, çabalarına değecek.",
-      "Gözünü hedeften ayırma.",
-      "Sınav sadece bir basamak.",
-      "Her geçen gün daha iyiye.",
-      "Disiplin, başarının anahtarıdır.",
-      "Vazgeçmek yok, mücadeleye devam.",
-      "Gücünü içinden al.",
-      "Kendine inan, başkalarının ne dediği önemli değil.",
-      "Hayallerin sana fısıldıyor.",
-      "Yüksek hedefler koy, daha çok çalış.",
-      "En iyisi olmak için buradasın.",
-      "Her zorluğun arkasında bir zafer var.",
-      "Sen eşsizsin, başarın da öyle olacak.",
-      "Odaklan, çünkü zaman akıyor.",
-      "Başarı, seninle birlikte yola çıktı.",
-      "Her ter damlası bir altın değerinde.",
-      "Hayatın değişiyor, sen bunu başarıyorsun.",
-      "Şimdi topla kendini, yola devam.",
-      "Unutma, sen güçlüsün.",
-      "Yarınlara umutla bak.",
-      "En iyi sonuçlar senin olacak.",
-      "Kendini keşfet, sınırlarını zorla.",
-      "Başarısızlık yoktur, ders vardır.",
-      "Her gün kendini yenile.",
-      "Hayallerin gerçeğe dönüşecek.",
-      "Sakın pes etme, zafer seninle.",
-      "Geleceğin için mücadele et.",
-      "Her ders, yeni bir zafer.",
-      "Motivasyonunu canlı tut.",
-      "Kendine güvenmek, başarının ilk adımıdır.",
-      "Her adımın seni hedefine yaklaştırıyor.",
-      "Yılmadan çalış, istediğin üniversiteye ulaş.",
-      "Sen bu işi başaracaksın.",
-      "Korkuların seni durdurmasın.",
-      "Gelecekteki başarıların için yatırım yapıyorsun.",
-      "Her gün yeni bir fırsat, yeni bir şans.",
-      "Odaklan, başaracaksın.",
-      "Büyük düşün, büyük başar.",
-      "En iyi sen olmak için çabala.",
-      "Hayallerin gerçek olmak için seni bekliyor.",
-      "Asla vazgeçme, son ana kadar savaş.",
-      "Dün geride kaldı, bugün yeni bir sayfa.",
-      "Dün önemli değil, bugün ne yaptığın önemli.",
-      "Her sabah yeni bir başlangıç.",
-      "Disiplinle çalış, karşılığını al.",
-      "Zorluklar seni yıldırmasın, güçlendirsin.",
-      "Hedefine emin adımlarla ilerle.",
-      "Zihnine pozitif komutlar ver.",
-      "Yılma, çünkü emeklerin boşa gitmeyecek.",
-      "Kendine inan, en büyük destekçin sensin.",
-      "Bu süreç seni daha da olgunlaştıracak.",
-      "Hayallerini gerçekleştirmek senin elinde.",
-      "Pes etmek, asla bir seçenek değildir.",
-      "Gücünü keşfet, potansiyelini kullan.",
-      "Yarınlar senin için umut dolu.",
-      "Her tekrar, bilgiyi pekiştirir.",
-      "En iyi öğretmen, tecrübelerindir.",
-      "Yolculuk uzun olsa da, varış noktası buna değer.",
-      "Sessizce çalış, başarıların konuşsun.",
-      "Azmin ve kararlılığın, zaferin anahtarıdır.",
-      "İnanmakla başlar her şey.",
-      "Şüphe etme, yapabilirsin. ",
-      "Başarı senin içinde.",
-      "Her yeni gün, yeni bir umut.",
-      "Kararlılığını sürdür.",
-      "Engeller sadece testlerdir.",
-      "Zirve senin için var.",
-      "Motivasyonunu hep yüksek tut.",
-      "Pozitif düşün, pozitif sonuçlar al.",
-      "Kendine acıma, kendine inan.",
-      "Her sabah yeni bir şans.",
-      "Geleceğin parlaklığı senin elinde.",
-      "Başarı, çabana değecek.",
-      "Gözünü hedeften ayırma.",
-      "Sınav sadece bir araç.",
-      "Her geçen an daha iyiye.",
-      "Disiplin, başarının garantisidir.",
-      "Mücadele etmeye devam et.",
-      "İçindeki gücü kullan.",
-      "Kendine güven, çünkü sen özel birisin.",
-      "Hayallerin sana yol göstersin.",
-      "Yüksek hedefler, yüksek başarılar getirir.",
-      "En iyisi olmak için doğdun.",
-      "Her zorluğun sonunda bir zafer var.",
-      "Sen benzersizsin, başarın da öyle olacak.",
-      "Odaklan, çünkü zaman değerli.",
-      "Başarı seninle yola çıktı.",
-      "Her ter damlası bir hazinedir.",
-      "Hayatın değişiyor, sen bunu başarıyorsun.",
-      "Şimdi toparlan, yola devam.",
-      "Unutma, sen çok güçlüsün.",
-      "Yarınlara umutla bak.",
-      "En iyi sonuçlar seni bekliyor.",
-      "Kendini keşfet, sınırlarını zorla.",
-      "Başarısızlık yoktur, sadece öğrenme fırsatları vardır.",
-      "Her gün kendini yenile, daha iyi ol.",
-      "Hayallerin gerçeğe dönüşecek.",
-      "Asla pes etme, zafer senin.",
-      "Geleceğin için mücadele etmeye devam et.",
-      "Her ders, yeni bir kapı açar.",
-      "Motivasyonunu daima yüksek tut.",
-      "Kendine güven, çünkü sen buna değersin.",
-      "Her adımın, hedefine bir tuğla ekler.",
-      "Yılmadan çalış, hayallerine ulaş.",
-      "Sen bu sınavı başarabilirsin.",
-      "Gelecekteki kariyerin için çalışıyorsun.",
-      "Her gün yeni bir fırsat, kullan onu.",
-      "Odaklan, başarının kilidi sende.",
-      "Büyük düşün, büyük başar.",
-      "En iyi halinle ortaya çık.",
-      "Hayallerin gerçek olmak için seni bekliyor.",
-      "Asla vazgeçme, son ana kadar savaş.",
-      "Dün geride kaldı, bugün yeni bir sayfa.",
-      "Her sabah yeni bir şans.",
-      "Disiplinle çalış, sonuçlarını göreceksin.",
-      "Zorluklar seni durdurmasın, güçlendirsin.",
-      "Hedefine emin adımlarla ilerle.",
-      "Zihnine pozitif komutlar ver.",
-      "Yılma, çünkü emeklerin boşa gitmeyecek.",
-      "Kendine inan, en büyük destekçin sensin.",
-      "Bu süreç seni daha da olgunlaştıracak.",
-      ];const colors = ["#ffffff", "#ffffcc", "#ffccff", "#ccffff", "#ffe6cc"];
+    <script>
+        // Set the target date for YKS 2026. This is a placeholder as the official date isn't out.
+        // I've set it to June 7, 2026, 09:30:00 as an example. You can change this.
+        // Current date for context: Tuesday, July 1, 2025 at 2:51:16 PM +03
+        const targetDate = new Date("June 7, 2026 09:30:00"); 
+        const daysEl = document.getElementById("days");
+        const hoursEl = document.getElementById("hours");
+        const minutesEl = document.getElementById("minutes");
+        const secondsEl = document.getElementById("seconds");
+        const quoteEl = document.getElementById("quote");
 
-    function updateCountdown() {
-      const now = new Date();
-      const diff = targetDate - now;
+        const quotes = [
+            "Çalıştığın gün, hayalindeki güne bir gün daha yaklaşıyorsun.",
+            "Yorulabilirsin ama asla vazgeçme! Sen bu işi başaracaksın.",
+            "Başarı, cesaretin ve kararlılığının ürünüdür.",
+            "Bugün yaptığın fedakarlık, yarının zaferi olur.",
+            "Hayal et, inan, çalış ve kesinlikle başar.",
+            "Hedefine giden yolda attığın her adım değerlidir.",
+            "Çaban, gelecekteki parlak başarının mimarıdır.",
+            "Zorlandığın anlar, aslında geliştiğin anlardır.",
+            "Kendine güven, en büyük gücün bu.",
+            "Hayallerine bir adım daha yakınsın, sakın pes etme.",
+            "Her gün yeni bir başlangıç, yeni bir fırsattır.",
+            "Başarı, sıkı çalışmanın muhteşem ürünüdür.",
+            "Unutma, sen kesinlikle yapabilirsin!",
+            "Geleceğin, bugünkü kararlılığınla şekilleniyor.",
+            "Düşüncelerini tamamen hedefine odakla.",
+            "Her soru, seni zirveye taşıyan değerli bir basamaktır."
+        ];
 
-      if (diff <= 0) {
-        document.getElementById("countdown").textContent = "Sınav zamanı geldi!";
-        return;
-      }
+        function updateCountdown() {
+            const now = new Date();
+            const diff = targetDate - now;
 
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((diff / (1000 * 60)) % 60);
-      const seconds = Math.floor((diff / 1000) % 60);
+            if (diff <= 0) {
+                document.getElementById("countdown").innerHTML = "<div style='grid-column: 1/-1; font-size: 2.5rem; color: #00F0FF; text-align: center; animation: celebration 1s ease-in-out infinite alternate; text-shadow: 0 0 20px #00F0FF;'>🎉 SINAV ZAMANI GELDİ! 🎉</div>";
+                return;
+            }
 
-      daysEl.textContent = days;
-      hoursEl.textContent = hours;
-      minutesEl.textContent = minutes;
-      secondsEl.textContent = seconds;
-    }
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((diff / (1000 * 60)) % 60);
+            const seconds = Math.floor((diff / 1000) % 60);
 
-    function changeColors() {
-      const randomIndex = Math.floor(Math.random() * colors.length);
-      document.querySelectorAll(".time-box").forEach(box => {
-        box.style.color = colors[randomIndex];
-      });
-      quoteEl.style.color = colors[randomIndex];
-    }
+            daysEl.textContent = days.toString().padStart(3, '0');
+            hoursEl.textContent = hours.toString().padStart(2, '0');
+            minutesEl.textContent = minutes.toString().padStart(2, '0');
+            secondsEl.textContent = seconds.toString().padStart(2, '0');
+        }
 
-    function changeQuote() {
-      const randomIndex = Math.floor(Math.random() * quotes.length);
-      quoteEl.textContent = quotes[randomIndex];
-    }
+        function changeQuote() {
+            const randomIndex = Math.floor(Math.random() * quotes.length);
+            quoteEl.style.opacity = '0';
+            quoteEl.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                quoteEl.textContent = quotes[randomIndex];
+                quoteEl.style.opacity = '1';
+                quoteEl.style.transform = 'translateY(0)';
+            }, 400);
+        }
 
-    updateCountdown();
-    changeColors();
-    changeQuote();
+        // Create magical particles
+        function createMagicParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'magic-particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 6 + 's';
+            particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+            document.body.appendChild(particle);
+            
+            setTimeout(() => particle.remove(), 8000);
+        }
 
-    setInterval(updateCountdown, 1000);
-    setInterval(() => {
-      changeColors();
-      changeQuote();
-    }, 10000);
-  </script>
+        // Cursor trail effect
+        document.addEventListener('mousemove', (e) => {
+            if (Math.random() > 0.7) {
+                const trail = document.createElement('div');
+                trail.className = 'cursor-trail';
+                trail.style.left = e.clientX - 7.5 + 'px';
+                trail.style.top = e.clientY - 7.5 + 'px';
+                document.body.appendChild(trail);
+                
+                setTimeout(() => trail.remove(), 800);
+            }
+        });
+
+        // Add celebration keyframes
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes celebration {
+                0% { transform: scale(1) rotate(0deg); text-shadow: 0 0 20px #00F0FF; }
+                50% { transform: scale(1.05) rotate(1deg); text-shadow: 0 0 30px #FF00FF; }
+                100% { transform: scale(1) rotate(0deg); text-shadow: 0 0 20px #00F0FF; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize
+        updateCountdown();
+        changeQuote();
+
+        // Update intervals
+        setInterval(updateCountdown, 1000);
+        setInterval(changeQuote, 7000);
+        setInterval(createMagicParticle, 500);
+
+        // Add smooth transition to quote changes
+        quoteEl.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+    </script>
 </body>
 </html>
